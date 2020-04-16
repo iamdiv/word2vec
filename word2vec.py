@@ -143,3 +143,12 @@ Y_one_hot = np.zeros((vocab_size,m))
 Y_one_hot[Y.flatten(), np.arange(m)] = 1
 parameters = model_training(X, Y_one_hot, vocab_size, 50, 0.05, 5000, batch_size=128, parameters=None, print_cost=True)
 
+X_test = np.arange(vocab_size)
+X_test = np.expand_dims(X_test, axis=0)
+softmax_test, _ = Forword_propagation(X_test, parameters)
+top_sorted_inds = np.argsort(softmax_test, axis=0)[-4:,:]
+
+for input_ind in range(vocab_size):
+    input_word = id_to_word[input_ind]
+    output_words = [id_to_word[output_ind] for output_ind in top_sorted_inds[::-1, input_ind]]
+    print("{}'s neighbor words: {}".format(input_word, output_words))
